@@ -1,11 +1,15 @@
 ---
 title: rCore学习笔记
-date: Thu Apr 25 15:53:16 CST 2024
-categories: [OS,study_note]
-tags: [os,rcore]     # TAG names should always be lowercase
+Author: SaZiKK
+categories: OS
+date create:  2024-02-26 10:02:08 +0800
+date:  2024-04-25 17:04:30 +0800
+tags:
+  - os
 ---
 
-# rCore学习笔记
+
+# rcore学习笔记
 
 教程的环境变量设置似乎有问题，qemu环境变量修改后正常：
 
