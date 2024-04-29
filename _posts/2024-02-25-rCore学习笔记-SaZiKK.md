@@ -2,9 +2,10 @@
 title: rCore学习笔记
 Author: SaZiKK
 categories:
-  - OS study
+  - OS
+  - study
 date create: 2024-04-25 17:04:03 +0800
-date: 2024-04-25 20:04:38 +0800
+date: 2024-04-29 23:04:01 +0800
 tags:
   - os
   - rCore
