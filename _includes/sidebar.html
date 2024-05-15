@@ -13,25 +13,25 @@ style="background-image: url('/assets/figures/background.jpg');background-size: 
     </a>
 
     <h1 class="site-title" >
-      <a href="{{ '/' | relative_url }}" style="color:rgb(214, 214, 214);">{{ site.title }}</a>
+      <a href="{{ '/' | relative_url }}" style="color: white">{{ site.title }}</a>
     </h1>
-    <p class="site-subtitle fst-italic mb-0" style="color:rgb(214, 214, 214);">{{ site.tagline }}</p>
+    <p class="site-subtitle fst-italic mb-0" style="color: white">{{ site.tagline }}</p>
   </header>
   <!-- .profile-wrapper -->
 
   <nav class="flex-column flex-grow-1 w-100 ps-0">
     <ul class="nav">
       <!-- home -->
-      <li class="nav-item{% if page.layout == 'home' %}{{ " active" }}{% endif %}" style="color:rgb(214, 214, 214);">
-        <a href="{{ '/' | relative_url }}" class="nav-link" style="color:rgb(214, 214, 214);">
+      <li class="nav-item{% if page.layout == 'home' %}{{ " active" }}{% endif %}" style="color: black">
+        <a href="{{ '/' | relative_url }}" class="nav-link" style="color: black">
           <i class="fa-fw fas fa-home"></i>
           <span>{{ site.data.locales[include.lang].tabs.home | upcase }}</span>
         </a>
       </li>
       <!-- the real tabs -->
       {% for tab in site.tabs %}
-        <li class="nav-item{% if tab.url == page.url %}{{ " active" }}{% endif %}" style="color:rgb(214, 214, 214);">
-          <a href="{{ tab.url | relative_url }}" class="nav-link" style="color:rgb(214, 214, 214);">
+        <li class="nav-item{% if tab.url == page.url %}{{ " active" }}{% endif %}" style="color: black">
+          <a href="{{ tab.url | relative_url }}" class="nav-link" style="color: black">
             <i class="fa-fw {{ tab.icon }}"></i>
             {% capture tab_name %}{{ tab.url | split: '/' }}{% endcapture %}
 
@@ -109,7 +109,7 @@ style="background-image: url('/assets/figures/background.jpg');background-size: 
             rel="{{ link_types }}"
           {% endunless %}
         >
-          <i class="{{ entry.icon }}" style="color:rgb(214, 214, 214);"></i>
+          <i class="{{ entry.icon }}" style="color: black"></i>
         </a>
       {% endif %}
     {% endfor %}

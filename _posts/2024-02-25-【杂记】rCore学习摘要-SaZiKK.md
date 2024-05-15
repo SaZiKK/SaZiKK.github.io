@@ -1,12 +1,11 @@
 ---
-title: 【杂记】rCore学习摘要
-title: 【杂记】rCore学习摘要
+title: 【杂记】rCore学习摘要-SaZiKK
 Author: SaZiKK
 categories:
   - OS
   - study
 date:  2024-05-13 02:52:08 +0800
-date modify:  2024-05-14 18:18:23 +0800
+date modify:  2024-05-16 00:42:20 +0800
 tags:
   - os
   - rCore

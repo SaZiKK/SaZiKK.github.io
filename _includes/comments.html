@@ -3,3 +3,17 @@
   {% capture path %}comments/{{ site.comments.active }}.html{% endcapture %}
   {% include {{ path }} %}
 {% endif %}
+<div id="gitalk-container"></div>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: 'Ov23liMmcRUqh0GtYTNY',
+    clientSecret: 'f0834bc6fe49dfd6600bb260f8af707e8bb7ee8a',
+    repo: 'blog_comments',
+    owner: 'SaZiKK',
+    admin: ['SaZiKK'],
+    id: '{{ page.url | absolute_url }}',
+  });
+
+  gitalk.render('gitalk-container');
+</script>
