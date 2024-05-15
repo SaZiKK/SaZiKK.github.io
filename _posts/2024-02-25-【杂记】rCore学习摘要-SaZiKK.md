@@ -1,5 +1,6 @@
 ---
 title: 【杂记】rCore学习摘要
+title: 【杂记】rCore学习摘要
 Author: SaZiKK
 categories:
   - OS
