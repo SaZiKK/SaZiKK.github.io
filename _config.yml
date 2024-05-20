@@ -133,7 +133,7 @@ gems: [jekyll-mermaid]
 # ------------ The following options are not recommended to be modified ------------------
 
 mermaid:
-  src: 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js'
+  src: '../../assets/js/mermaid/mermaid.min.js'
 
 kramdown:
   syntax_highlighter: rouge
