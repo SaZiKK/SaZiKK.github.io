@@ -132,6 +132,9 @@ gems: [jekyll-mermaid]
 
 # ------------ The following options are not recommended to be modified ------------------
 
+mermaid:
+  src: 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js'
+
 kramdown:
   syntax_highlighter: rouge
   syntax_highlighter_opts: # Rouge Options › https://github.com/jneen/rouge#full-options
