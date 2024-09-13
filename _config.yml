@@ -92,8 +92,9 @@ comments:
     shortname: # fill with the Disqus shortname. › https://help.disqus.com/en/articles/1717111-what-s-a-shortname
   # utterances settings › https://utteranc.es/
   utterances:
-    repo: SaZiKK/blog_comments # <gh-username>/<repo>
-    issue_term: {{ page.url }} # < url | pathname | title | ...>
+    repo: SaZiKK/SaZiKK.github.io # <gh-username>/<repo>
+    issue_term: pathname
+    label: Comments
   # Giscus options › https://giscus.app
   giscus:
     repo: # <gh-username>/<repo>
