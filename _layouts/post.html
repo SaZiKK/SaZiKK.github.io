@@ -30,6 +30,11 @@ tail_includes:
         </span>
       {% endif %}
 
+      <span>
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <b><span id="busuanzi_value_page_pv"></span></b>次浏览
+      </span>
+
       {% if page.image %}
         {% capture src %}src="{{ page.image.path | default: page.image }}"{% endcapture %}
         {% capture class %}class="preview-img{% if page.image.no_bg %}{{ ' no-bg' }}{% endif %}"{% endcapture %}
@@ -125,6 +130,7 @@ tail_includes:
         <a href="{{ site.data.locales[lang].copyright.license.link }}">
           {{ site.data.locales[lang].copyright.license.name }}
         </a>
+        
         {% endcapture %}
 
           {{ site.data.locales[lang].copyright.license.template | replace: ':LICENSE_NAME', _replacement }}
