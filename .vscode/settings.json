@@ -1,5 +1,11 @@
 {
     "markdown.extension.katex.macros": {},
     "markdown-preview-enhanced.codeBlockTheme": "auto.css",
-    "markdown-preview-enhanced.enableExtendedTableSyntax": true
+    "markdown-preview-enhanced.enableExtendedTableSyntax": true,
+    "frontMatter.content.pageFolders": [
+        {
+            "title": "_posts",
+            "path": "[[workspace]]/_posts"
+        }
+    ]
 }

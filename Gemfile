@@ -4,6 +4,10 @@ source "https://rubygems.org"
 
 gem "jekyll-theme-chirpy", "~> 6.5", ">= 6.5.5"
 
+gem 'jekyll-last-modified-at'
+
+
+
 group :test do
   gem "html-proofer", "~> 4.4"
 end

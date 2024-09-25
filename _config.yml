@@ -131,6 +131,11 @@ baseurl: ""
 
 gems: [jekyll-mermaid]
 
+last_modified_at:
+  time_format: "%Y-%m-%d %H:%M:%S %z"  # 修改时间的格式
+  include: [".md", ".markdown"]          # 包含的文件类型
+
+
 # ------------ The following options are not recommended to be modified ------------------
 
 mermaid:
