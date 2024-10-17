@@ -5,15 +5,16 @@ categories:
   - OS
   - study
 date: 2024-02-25 14:24:46 +0800
-date modify:  2024-05-18 22:17:09 +0800
+date modify: 2024-05-18 22:17:09 +0800
 tags:
   - os
   - rCore
 comments: true
-date create:  2024-05-13 02:52:08 +0800
+date create: 2024-05-13 02:52:08 +0800
 ---
 
 这是刚开始学习rCore-tutorial-book时的随笔杂记，记录了我的一些思考和学习过程。
+
 # rcore学习笔记
 
 教程的环境变量设置似乎有问题，qemu环境变量修改后正常：
@@ -28,7 +29,7 @@ wsl宕机，报错：
 
 ```bash
 占位程序接收到错误数据。
-Error code: Wsl/Service/0x800706f7 
+Error code: Wsl/Service/0x800706f7
 Press any key to continue...
 ```
 
@@ -56,7 +57,7 @@ gdb调试qemu无法到达断点0x80200000
 
 必须保证以qemu-7.0.0启动调试，或者去github上自己编译适合更高版本的rustsbi.bin
 
-### 2024.3.5 
+### 2024.3.5
 
 #### qemu启动系统内核流程
 
@@ -102,7 +103,7 @@ riscv64-unknown-elf-gdb \
     -ex 'target remote localhost:1234'
 ```
 
-### 2024.3.13 
+### 2024.3.13
 
 #### rust-analyzer补全失效
 
@@ -110,12 +111,12 @@ riscv64-unknown-elf-gdb \
 
 ```json
 {
-    "rust-analyzer.linkedProjects": [
-        "/home/sazikk/workspace/rCore-Tutorial-v3/os/Cargo.toml",
-        "/home/sazikk/workspace/test_program/backtrace/Cargo.toml",
-        "/home/sazikk/workspace/test_program/ls/Cargo.toml",
-        "/home/sazikk/workspace/world_hello/Cargo.toml"
-    ]
+  "rust-analyzer.linkedProjects": [
+    "/home/sazikk/workspace/rCore-Tutorial-v3/os/Cargo.toml",
+    "/home/sazikk/workspace/test_program/backtrace/Cargo.toml",
+    "/home/sazikk/workspace/test_program/ls/Cargo.toml",
+    "/home/sazikk/workspace/world_hello/Cargo.toml"
+  ]
 }
 ```
 
@@ -161,7 +162,7 @@ ch1到这里结束
 
 #### 继续完善应用程序
 
-####  更新makefile用于在完成系统之前测试应用程序
+#### 更新makefile用于在完成系统之前测试应用程序
 
 ### 2024.3.20
 
@@ -175,7 +176,7 @@ cargo build会自动检测并运行项目根目录下的build.rs作为构建脚�
 
 同项目下：
 
-``` rust
+```rust
 extern crate crate_name; //整个目录
 或
 //Cargo.toml
@@ -209,7 +210,7 @@ extern crate crate_name;
 crate_name = "0.1.0"
 ```
 
-rust的引用真™抽象   屮
+rust的引用真™抽象 屮
 
 ### 2024.3.21
 
@@ -387,7 +388,7 @@ impl TaskManagerInner {
         let last_time = self.time_cnt;
         self.time_cnt = get_time_ms();
         return self.time_cnt - last_time;
-    } 
+    }
 }
 ```
 
@@ -426,18 +427,18 @@ pub fn user_time_end() {
 
 首先需要知道处理浮点数指令之前需要设置sstatus的fs段为非零值,以下为手册原文：
 
->The FS, VS, and XS fields use the same status encoding as shown in Table 3.3, with the four possible status values being Off, Initial, Clean, and Dirty. 
+> The FS, VS, and XS fields use the same status encoding as shown in Table 3.3, with the four possible status values being Off, Initial, Clean, and Dirty.
 >
->| Status | FS and VS Meaning | XS Meaning                   |
->| ------ | ----------------- | ---------------------------- |
->| 0      | Off               | off                          |
->| 1      | Initial           | None dirty or clean, some on |
->| 2      | Clean             | None dirty, some clean       |
->| 3      | Dirty             | Some dirty                   |
+> | Status | FS and VS Meaning | XS Meaning                   |
+> | ------ | ----------------- | ---------------------------- |
+> | 0      | Off               | off                          |
+> | 1      | Initial           | None dirty or clean, some on |
+> | 2      | Clean             | None dirty, some clean       |
+> | 3      | Dirty             | Some dirty                   |
 >
-><center><h5>Encoding of FS[1:0], VS[1:0], and XS[1:0] status fields.</h5></center>
+> <center><h5>Encoding of FS[1:0], VS[1:0], and XS[1:0] status fields.</h5></center>
 >
->If the F extension is implemented, the FS field shall not be read-only zero. If neither the F extension nor S-mode is implemented, then FS is read-only zero. If S-mode is implemented but the F extension is not, FS may optionally be read-only zero.
+> If the F extension is implemented, the FS field shall not be read-only zero. If neither the F extension nor S-mode is implemented, then FS is read-only zero. If S-mode is implemented but the F extension is not, FS may optionally be read-only zero.
 
 可以看到fs段如果为0，浮点数指令将被关闭，使用就会报错。（多看手册是好文明）所以我们需要在使用浮点数指令之前手动修改sstatus.fs的值。fs在sstatus的第13，14位，我们可以使用CSRW或CSRS来修改特权寄存器的值：
 
@@ -451,7 +452,7 @@ pub fn user_time_end() {
 ```
 
 ```assembly
-    li t0, 0x00003000 
+    li t0, 0x00003000
     csrs sstatus, t0 #注意在load前也要设置
     fld f0, 34*8(sp)
     fld f1, 35*8(sp)
@@ -499,7 +500,7 @@ error: <inline asm>:37:5: instruction requires the following: 'D' (Double-Precis
 
 #### 扩展内核，支持统计任务开销
 
-因为切换任务开销非常小，所以我们先实现一个统计单位为微秒的计时方法，就是对time::read()的重新封装。然后我们对___switch进行二次封装，加入计时方法，并设置两个静态变量用于存储时间，最后我们封装静态变量，在run_next_task中所有应用结束后，调用方法并打印开销
+因为切换任务开销非常小，所以我们先实现一个统计单位为微秒的计时方法，就是对time::read()的重新封装。然后我们对\_\_\_switch进行二次封装，加入计时方法，并设置两个静态变量用于存储时间，最后我们封装静态变量，在run_next_task中所有应用结束后，调用方法并打印开销
 
 #### 扩展内核，支持在内核态响应中断
 
@@ -607,7 +608,7 @@ __real_trap_entry:
     # allocate a TrapContext on kernel stack
     addi sp, sp, -34*8
     ......
-    
+
 __restore:
     # now sp->kernel stack(after allocated), sscratch->user stack
     # restore sstatus/sepc
@@ -782,7 +783,7 @@ file ../user/target/riscv64gc-unknown-none-elf/debug/00power_3
 切换系统用户/内核状态之前需要清除断点
 待切换回内核态时，再使用
 file target/riscv64gc-unknown-none-elf/debug/os
-重新加载内核调试信息，使用b *0xfffffffffffff000等设置内核断点
+重新加载内核调试信息，使用b \*0xfffffffffffff000等设置内核断点
 
 以上方法可以调试ecall/sret这样手动切换状态，但是对时钟这样的自动中断好像还不好调试
 
