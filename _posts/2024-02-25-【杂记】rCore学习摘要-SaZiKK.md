@@ -11,9 +11,13 @@ tags:
   - rCore
 comments: true
 date create: 2024-05-13 02:52:08 +0800
+pin: true
+excerpt: "这是刚开始学习rCore-tutorial-book时的随笔杂记，记录了我的一些思考和学习过程。"
 ---
 
 这是刚开始学习rCore-tutorial-book时的随笔杂记，记录了我的一些思考和学习过程。
+
+<!-- more -->
 
 # rcore学习笔记
 
@@ -494,7 +498,7 @@ error: <inline asm>:37:5: instruction requires the following: 'D' (Double-Precis
     ^
 ```
 
-经过查询资料，这个问题可能来自global_asm!的一个bug或者llvm的bug。在汇编代码的开头加上`.attribute arch, "rv64gc"`就可以解决这个bug这个方法来自github/rust下面的一个issue：[`global_asm!` macro causes non-fatal errors to be printed during compilation for some RISC-V extension instructions when targeting the GC extensions](https://github.com/rust-lang/rust/issues/80608#top)#80608。目前完全不清楚原理。
+经过查询资料，这个问题可能来自global_asm!的一个bug或者llvm的bug。在汇编代码的开头加上`.attribute arch, "rv64gc"`就可以解决这个bug,这个方法来自github/rust下面的一个issue：[`global_asm!` macro causes non-fatal errors to be printed during compilation for some RISC-V extension instructions when targeting the GC extensions](https://github.com/rust-lang/rust/issues/80608#top)#80608。目前完全不清楚原理。
 
 ### 2024.3.27
 
