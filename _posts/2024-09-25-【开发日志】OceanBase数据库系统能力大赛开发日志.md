@@ -130,3 +130,96 @@ sub_select_stmt:
     ;
 ```
 随后，我们要处理子查询的关键字，如 `IN` `NOT IN` 等等，我把他们统一作为运算符处理，同时把子查询的 stmt 加在运算符的左右两边，让子查询可以被作为运算数解析，这样前端就基本完成了
+
+#### 递归解析子查询
+
+子查询可能出现嵌套查询的情况，因此要支持递归的解析子查询，并且将查询结果逐级回传。嵌套查询即 `ConditionSqlNode` 的两边除了是值之外还有可能是子查询，因此要为 `ConditionSqlNode` 添加子查询成员，并添加子查询标志位：
+``` c++
+struct ConditionSqlNode {  
+  int left_is_attr;  ///< TRUE if left-hand side is an attribute
+                     ///< 1时，操作符左边是属性名，0时，是属性值
+  Value left_value;          ///< left-hand side value if left_is_attr = FALSE
+  RelAttrSqlNode left_attr;  ///< left-hand side attribute
+  CompOp comp;               ///< comparison operator
+  int right_is_attr;         ///< TRUE if right-hand side is an attribute
+  bool left_is_sub_query;  ///< 1时，操作符左边是属性名，0时，是属性值  // todo:
+                           ///< not support in yaccccccc yet
+  bool right_is_sub_query;  ///< 1时，操作符右边是属性名，0时，是属性值
+  RelAttrSqlNode right_attr;  ///< 右边的属性
+  Value right_value;  ///< right-hand side value if right_is_attr = FALSE
+  SubSelectSqlNode* left_sub_query;  ///< sub-query if left_is_sub_query = TRUE
+  SubSelectSqlNode*
+      right_sub_query;               ///< sub-query if right_is_sub_query = TRUE
+  SelectStmt* left_sub_query_stmt;   ///< sub-query stmt
+  SelectStmt* right_sub_query_stmt;  ///< sub-query stmt
+};
+
+```
+需要注意的是，无论是 `Value` 还是子查询，都应当当作一个表达式处理，这样能大幅简化代码，提高开发效率。这里由于经验不足，还是在他原有框架上补全，导致开发中后期浪费了大量时间重构代码和适配框架。
+
+这里的递归实现比较简单，就是在逻辑算子的创建函数中，检查是否有子查询并为子查询创建逻辑算子，这样就能够实现递归的调用逻辑算子创建函数。
+
+#### `filter` 支持子查询类型
+
+filter 会记录表达式左右的值以及运算符，显然这里也需要支持子查询，因此新增了一种子查询类型。从这里就可以看出，如果先前先把所有子查询、`Value` 等都统一解析为表达式，那么这里的适配就会简单很多，统一当作 `Expression` 处理即可。
+
+### 2024.10.13
+
+#### 完成支持子查询
+
+为了保证子查询能够被成功的执行，除了支持递归解析子查询外，还要提前将子查询的结果查出来并记录、外传，这样才能保证外层查询正常进行。
+
+具体的实现方法参考了正常查询的实现，但是把查询结果的过程提前到了对子查询类型 `get_value` 时。由于所有的值都是通过 `get_value` 函数取出并进行比较的，因此在这里实现子查询变量的实际查询可以保证不重不漏，同时这也近似一种懒分配的思想，即需要使用时才查询出实际的值。
+```c++
+// src/observer/sql/expr/expression.cpp
+RC SubQueryExpr::get_value(const Tuple &tuple, Value &value) const {
+  LOG_WARN("invalid operation. cannot get single value from subquery expression");
+  return RC::INVALID_ARGUMENT;
+}
+
+RC SubQueryExpr::get_value_list(std::vector<Value> &value_list) {
+  LogicalPlanGenerator generator;
+  SelectStmt *selectstmt = this->sub_query_;
+  Trx *trx = nullptr;  // todo: 暂时使用临时创建的trx
+
+  if (selectstmt == nullptr) {
+    LOG_WARN("subquery is null");
+    return RC::INVALID_ARGUMENT;
+  }
+
+  // 初始化物理算子
+  RC rc = physical_operator->open(trx);
+  if (rc != RC::SUCCESS) {
+    LOG_WARN("failed to open sub physical operator. rc=%s", strrc(rc));
+    return rc;
+  }
+
+  // 将查表结果放入value_list
+  while (RC::SUCCESS == (rc = physical_operator->next())) {
+    Tuple *tuple = physical_operator->current_tuple();
+    Value value;
+    RC rc = tuple->cell_at(0, value);
+    if (rc != RC::SUCCESS) {
+      LOG_WARN("failed to get tuple cell value. rc=%s", strrc(rc));
+      return rc;
+    }
+    value_list.push_back(value);
+  }
+
+  rc = physical_operator->close();
+  if (rc != RC::SUCCESS) {
+    LOG_WARN("failed to close sub physical operator. rc=%s", strrc(rc));
+    return rc;
+  }
+
+  return RC::SUCCESS;
+}
+
+void SubQueryExpr::set_logical_operator(std::unique_ptr<LogicalOperator, void (*)(LogicalOperator *)> logical_op) {
+  logical_operator = std::move(logical_op);
+}
+
+void SubQueryExpr::set_physical_operator(std::unique_ptr<PhysicalOperator, void (*)(PhysicalOperator *)> physical_op) {
+  physical_operator = std::move(physical_op);
+}
+```
