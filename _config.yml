@@ -129,6 +129,8 @@ paginate: 10
 # The base URL of your site
 baseurl: ""
 
+encoding: utf-8
+
 gems: [jekyll-mermaid]
 
 last_modified_at:

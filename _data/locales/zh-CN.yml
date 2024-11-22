@@ -13,7 +13,7 @@ tabs:
   home: 首页
   categories: 分类
   tags: 标签
-  archives: 归档
+  archives: 时间线
   about: 关于
 
 # the text displayed in the search bar & search results
@@ -24,7 +24,7 @@ search:
 
 panel:
   lastmod: 最近更新
-  trending_tags: 热门标签
+  trending_tags: 我的热门标签
   toc: 文章内容
 
 copyright:
