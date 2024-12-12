@@ -312,3 +312,149 @@ MemPoolItem::item_unique_ptr BplusTreeHandler::make_keys(const std::vector<const
 `NULL` 是 `unique` 实现的一个难点，因为所有 `NULL` 都要保证可以重复插入，在这里由于我的队友dmx实现 `NULL` 的方式非常难崩，所以我的实现也非常难崩。我们的 `NULL` 值是直接使用特殊字符特判，从ASCII码角落里翻出来那种超级抽象的字符，所以我的实现就是在最底层的查重函数那里特判，如果有这个字符直接返回。
 这种属于赛博案底的代码写在博客里是不是算赛博自首。
 
+### 2024.10.29
+#### 实现 `TEXT` 
+`TEXT` 即超长字符串，过长而不能存储在 `record` 中，需要存储在 miniob 提供的抽象页中。由于我对 miniob 的底层实现不了解（也没时间看），因此我不清楚这个页是否和内存中的页对应，但是他页大小不是4k，应该是一个抽象出的页。
+
+这里实现的思路就很简单了，在应该写入 `record` 的时候写入页中即可，读取时一样操作。为了保证到时候读得出来，这里我把写入的页号代替字符串本体写入了 `record` 中。我们直接在写入 `record` 的函数中特判一下 `TEXT`，调用分配页的函数 `data_buffer_pool_->allocate_page()` 然后按照上述方案仔细处理即可。
+```c++
+// src/observer/storage/table/table.cpp
+
+RC Table::set_value_to_record(char *record_data, Value &value, const FieldMeta *field, int index) {
+  size_t copy_len = field->len();
+  size_t data_len = value.length();
+
+  if (value.attr_type() == AttrType::VECTORS && data_len <= 1000 && copy_len != (size_t)data_len) return RC::INVALID_ARGUMENT;
+
+  // 如果是 TEXT 类型，在这里就要写入页中
+  if (field->type() == AttrType::TEXT) {
+    int offset = 0;
+    vector<PageNum> page_nums;
+    for (int i = 0; i < BP_MAX_TEXT_PAGES && offset < value.length(); i++) {
+      Frame *frame = nullptr;
+      RC rc = RC::SUCCESS;
+      rc = data_buffer_pool_->allocate_page(&frame);
+      data_buffer_pool_->mark_text_page(frame->page_num(), true);
+      if (rc != RC::SUCCESS) {
+        LOG_ERROR("Failed to allocate page for text field. table name=%s, field name=%s, rc=%d:%s", table_meta_.name(), field->name(), rc, strrc(rc));
+        return rc;
+      }
+      auto data = frame->page().data;
+      memset(data, 0, BP_PAGE_DATA_SIZE);
+      int len = std::min(value.length() - offset, BP_PAGE_DATA_SIZE);
+      memcpy(data, value.data() + offset, len);
+      offset += len;
+      page_nums.push_back(frame->page_num());
+      frame->dirty();
+      data_buffer_pool_->unpin_page(frame);
+    }
+    char *data = new char[BP_MAX_TEXT_RECORD_SIZE];
+    memset(data, 0, BP_MAX_TEXT_RECORD_SIZE);
+    offset = 0;
+    int length = value.length();
+    memcpy(data, &length, 4);
+    offset += 4;
+    for (int i = 0; i < (int)page_nums.size(); i++) {
+      memcpy(data + offset, &page_nums[i], 4);
+      offset += 4;
+    }
+    for (int i = page_nums.size(); i < BP_MAX_TEXT_PAGES; i++) {
+      memset(data + offset, 0, 4);
+      offset += 4;
+    }
+    value.set_type(AttrType::CHARS);
+    value.update_text_data(data, BP_MAX_TEXT_RECORD_SIZE);
+    delete[] data;
+  }
+
+  // copy_len = field->len();
+  // data_len = value.length();
+  if (field->type() == AttrType::CHARS) {
+    if (copy_len > data_len) {
+      data_len = value.length();
+      copy_len = data_len + 1;
+    }
+  }
+
+  if (field->type() != AttrType::VECTORS || value.get_vector_size() <= 1000) {
+    memcpy(record_data + field->offset(), value.data(), copy_len);
+  }
+
+  if (value.get_null()) {
+    const char *flag = "ÿÿÿÿ";
+    memcpy(record_data + field->offset(), flag, std::min(field->len(), 4));
+  }
+  return RC::SUCCESS;
+}
+```
+
+下面是读取的实现（其实是我懒得解析了所以直接贴代码）：
+
+```c++
+// src/observer/sql/expr/tuple.h
+
+ RC cell_at(int index, Value &cell) const override {
+    if (index < 0 || index >= static_cast<int>(speces_.size())) {
+      LOG_WARN("invalid argument. index=%d", index);
+      return RC::INVALID_ARGUMENT;
+    }
+
+    FieldExpr *field_expr = speces_[index];
+    const FieldMeta *field_meta = field_expr->field().meta();
+    int target_offset = field_meta->offset();
+    cell.set_type(field_meta->type());
+    if (strncmp(record_->data() + field_meta->offset(), "ÿÿÿÿ", std::min(4, field_meta->len())) == 0)
+      cell.set_null(true);
+    else if (cell.attr_type() == AttrType::TEXT) {
+      vector<Field> text_fields;
+      for (const FieldMeta &field_meta : *table_->table_meta().field_metas()) {
+        if (field_meta.type() == AttrType::TEXT) {
+          char *text_data = nullptr;                           // 用于存储text的数据
+          char *text_meta = (char *)malloc(field_meta.len());  // 用于存储text的元数据
+          char *text_index = (char *)malloc(sizeof(int));      // 用于取出text元数据的每个页号
+          int page_nums[BP_MAX_TEXT_PAGES];                    // 用于存储text所在的页号
+          memset(text_meta, 0, field_meta.len());
+          memcpy(text_meta, record_->data() + field_meta.offset(), field_meta.len());
+          memset(text_index, 0, sizeof(int));
+          memcpy(text_index, text_meta, sizeof(int));  // 取出头四位text的长度
+          int length = *((int *)text_index);
+          text_data = (char *)malloc(length);
+          memset(text_data, 0, length);
+          int used_pages = length / BP_PAGE_DATA_SIZE + 1;
+          for (int i = 0; i < used_pages; i++) {
+            memcpy(text_index, text_meta + sizeof(int) + i * sizeof(int), sizeof(int));
+            page_nums[i] = *((int *)text_index);
+          }
+          int offset = 0;
+          for (int i = 0; i < used_pages; i++) {
+            Frame *frame;
+            RC rc = this->table_->data_buffer_pool()->get_this_page(page_nums[i], &frame);
+            if (rc != RC::SUCCESS) {
+              LOG_ERROR("Failed to get page. page_num=%d, rc=%s", page_nums[i], strrc(rc));
+              return rc;
+            }
+            int len = std::min(length - offset, BP_PAGE_DATA_SIZE);
+            memcpy(text_data + offset, frame->data(), len);
+            offset += len;
+          }
+          cell.set_type(AttrType::CHARS);
+          cell.update_text_data(text_data, length);
+        }
+      }
+    } else
+      cell.set_data(this->record_->data() + field_meta->offset(), field_meta->len());
+    return RC::SUCCESS;
+  }
+```
+
+#### 修复缓冲区问题
+
+完成之后的 `TEXT` 有一个很难崩的问题，自己测试过了但是上线怎么都过不了测评，而且报错只会显示输出不一样的行，还会因为长度截断，这就导致面对一堆超长的字符串我根本无从下手 debug， 后面通过在本地使用模拟线上的另一个测评框架，发现字符串都截断在 4096 的位置，由此推测肯定是某个缓冲区满了，事实也是这样。
+
+miniob 的线上环境分为 server 端和 client 端，在他的发送端和接收端都有一个读写缓存限制，就是这个限制导致字符串被截断。而我们平时使用 Makefile 都是相当于直接启动 server 端，读取 server 端的输出，因此没法发现这个问题，修改了缓冲区大小后成功通过测评。
+
+### 2024.11.3
+#### 实现 `high dim vector`
+`high dim vector` 即高维向量，就是很长的 vector，实现思路与 `TEXT` 完全相同，这里也就不再赘述。
+
+
