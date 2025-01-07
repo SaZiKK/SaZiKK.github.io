@@ -100,7 +100,7 @@ git am patches/patch01
 
 这是一系列共 21 个由字节的开发者提交的 patch，旨在使用软件方法为 RISCV 支持 64k 大小的页表（现有 MMU 只支持 4k），以提高性能表现。邮件交流过程中有其他开发者提到了 64k 页表潜在的内存内碎片问题，但是字节的开发者表示他们在 ARM 架构上的测试表现出了非常逆天的性能优化，所以想在 RISCV 上也试一下。不过他们提到在 riscv64 上的性能测试正在进行，他们争取在下一个版本给出性能数据。
 
-#### 实现方式
+#### patch 实现思路
 
 64k 页表的原理是通过将 16 张标准的 4k 大小页表的空间连续分配，并通过 RISCV 的 Svnapot（supervisor virtual naturally aligned power-of-2） Standard Extension 实现加速内存访问。
 
@@ -110,10 +110,22 @@ Svnapot 要求 pte 的第 63 位也就是 N 位为 1，然后会根据 pte 中 p
 
 可以看出实际上目前只支持 64k 的扩展，其余全部都是 reserved。~~从名字 naturally aligned power-of-2（自然对齐的二次方）也能看出来这个也扩展只支持二的幂次大小，这也非常好理解，因为两个 pte.ppn[0] 的 x xxxx 1000 之间恰好隔了 16，也就是 16 个 4k 页。~~ 这里的理解有误，还没有很好的理解这个扩展，需要继续研究。
 
+#### 代码实现
+
+##### patch 01/21:
+第一个 patch 首先是把软件页表和硬件页表的概念拆分开来
+
+
 #### patch 测试
 ##### 测试环境：
 - Ubuntu 22.04.5 LTS (GNU/Linux 6.8.0-49-generic x86_64) （ 806 服务器 ）
   - qemu-7.0.0
 ##### 测试方案：
-基于 v6.12 稳定版打 patch， 测试 redis、MySQL 等性能，与稳定版进行对比，
+基于 v6.12 稳定版打 patch，跑一些简单的 testbench，测试 redis、MySQL 等性能，与稳定版进行对比
+
+##### 测试流程：
+
+按照 Nextcloud 的文档用 qemu 启动了一下 kernel，这里遇到了一个[抽象的问题](../assets/figures/pdf/bug-when-cp.pdf)，硬控我一晚上。
+
+成功启动 kernel 之后我意识到一个简单的手搓 rootfs 没办法满足我的测试需要，这里可以选择各个发行版的 rootfs，也可以去找其他的 mini-rootfs。这里我选择了 alpine-minirootfs，他本体大小只有 2m，如果基础工具链齐全，后面所有的测试就都会基于这个 fs 来做。
 
