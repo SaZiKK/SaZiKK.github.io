@@ -2,8 +2,8 @@
 title: 【笔记】从零开始的 Linux Kernel Developer 生活
 Author: SaZiKK
 categories:
-  - OS
-  - study
+  - Study
+  - Study-OS
 tags:
   - os
   - Linux Kernel

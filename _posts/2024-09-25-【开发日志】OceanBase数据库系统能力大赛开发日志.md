@@ -2,8 +2,8 @@
 title: 【开发日志】OceanBase数据库系统能力大赛开发日志
 Author: SaZiKK
 categories:
-  - develop
-  - DB
+  - Develop
+  - Develop-DB
 date modify: 2024-09-25 22:54:56 +0800
 date: 2024-09-25 22:53:42 +0800
 tags:

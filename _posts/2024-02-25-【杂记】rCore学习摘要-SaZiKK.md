@@ -2,8 +2,8 @@
 title: 【杂记】rCore学习摘要-SaZiKK
 Author: SaZiKK
 categories:
-  - OS
-  - study
+  - Study
+  - Study-OS
 date: 2024-02-25 14:24:46 +0800
 date modify: 2024-05-18 22:17:09 +0800
 tags:
