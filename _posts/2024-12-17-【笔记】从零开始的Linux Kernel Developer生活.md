@@ -125,7 +125,7 @@ Svnapot 要求 pte 的第 63 位也就是 N 位为 1，然后会根据 pte 中 p
 
 ##### 测试流程：
 
-按照 Nextcloud 的文档用 qemu 启动了一下 kernel，这里遇到了一个[抽象的问题](../assets/figures/pdf/bug-when-cp.pdf)，硬控我一晚上。
+按照 Nextcloud 的文档用 qemu 启动了一下 kernel，这里遇到了一个[抽象的问题](https://sazikk.top/assets/figures/pdf/bug-when-cp.pdf)，硬控我一晚上。
 
 成功启动 kernel 之后我意识到一个简单的手搓 rootfs 没办法满足我的测试需要，这里可以选择各个发行版的 rootfs，也可以去找其他的 mini-rootfs。这里我选择了 alpine-minirootfs，他本体大小只有 2m，如果基础工具链齐全，后面所有的测试就都会基于这个 fs 来做。
 
