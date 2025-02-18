@@ -114,7 +114,7 @@ Svnapot 要求 pte 的第 63 位也就是 N 位为 1，然后会根据 pte 中 p
 
 这个扩展允许厂商自己处理 tlb 条目大小，比如对于目前支持的 64k ，tlb 条目可以是一条，也可以被分割为数条，其中每一条指向的内存区域大小都是 2 的幂次。这里的自定义条目大小目前支持 64k 和 4k，但是目前是否支持比如 8 16 32 这种大小我并不确定，因为目前这些大小的页还未支持，也就是说在 N 位置位的情况下，这个 pte 必须符合 64k 的标准，不然会抛出 page fault，况且手册中举的例子也是 64k 条目和 4k 条目。
 
-关于完整支持了 64k tlb 条目的 riscv soc 测试参见这篇论文：[Design, Implementation and Evaluation of the SVNAPOT Extension on a RISC-V Processor](../assets/figures/pdf/2406.17802v1.pdf)
+关于完整支持了 64k tlb 条目的 riscv soc 测试参见这篇论文：[Design, Implementation and Evaluation of the SVNAPOT Extension on a RISC-V Processor](https://sazikk.top/assets/figures/pdf/2406.17802v1.pdf)
 
 这篇文章使用了刚刚支持 svnapot 的 6.5 linux 内核，使用了 mmap 的特殊标志 `MAP_HUGE_64KB` 来创建 64k 页。
 
