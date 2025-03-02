@@ -11,7 +11,6 @@ tags:
   - rCore
 comments: true
 date create: 2024-05-13 02:52:08 +0800
-pin: true
 excerpt: "这是刚开始学习rCore-tutorial-book时的随笔杂记，记录了我的一些思考和学习过程。"
 ---
 
