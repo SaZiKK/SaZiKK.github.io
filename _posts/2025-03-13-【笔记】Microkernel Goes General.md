@@ -1,5 +1,5 @@
 ---
-title: 【笔记】论文阅读笔记-Microkernel Goes General: Performance and Compatibility in the HongMeng Production Microkernel
+title: 【笔记】论文阅读笔记-Microkernel Goes General
 Author: SaZiKK
 categories:
   - Papers
@@ -35,4 +35,11 @@ excerpt: "2024 OSDI 论文阅读笔记-Microkernel Goes General: Performance and
 
 1. 安全可靠性不足。其文件系统和大量驱动贡献了大量 CVE 漏洞，并且其中 80% 的漏洞都可以通过正确的隔离解决，而且由于代码的紧密耦合，很难对其进行优化和重构。同时，内核模块的不稳定也导致了频繁的升级，使内核在实际部署中不太实用
 2. 通用和专业化的冲突。linux 的目标是通用化，然而最新的 patch 在向服务器和云倾斜，甚至影响到了部分其他场景。同时，快速增长的各种设备需要专门的策略来保证性能和能耗，而对于 linux 进行针对性优化不仅需要消耗巨量人力，还很难并入内核主线。
-3. 定制化和内核更新的兼容。和内核主线同步需要花费大量努力，而 linux 频繁更新的内核 API 更是阻碍了同步，这导致了实际部署内核时的内核定制化非常困难
+3. 定制化和内核更新的不兼容。定制化的内核和内核主线同步需要花费大量努力，而 linux 频繁更新的内核 API 更是阻碍了同步，这导致了实际部署内核时的内核定制化非常困难。因此，市面上大量产品仍在使用 linux 2.6。
+
+### 针对问题的观察
+
+由于鸿蒙早已广泛部署商用，所以收集了很多如手机、路由器、汽车等具有代表性的场景下的运行数据。
+
+#### 观察一：
+
