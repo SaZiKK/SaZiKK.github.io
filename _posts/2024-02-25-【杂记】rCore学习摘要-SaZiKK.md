@@ -5,12 +5,12 @@ categories:
   - Study
   - Study-OS
 date: 2024-02-25 14:24:46 +0800
-date modify: 2024-05-18 22:17:09 +0800
+date modify:  2025-03-17 18:33:55 +0800
 tags:
   - os
   - rCore
 comments: true
-date create: 2024-05-13 02:52:08 +0800
+date create:  2024-05-13 02:52:08 +0800
 excerpt: "这是刚开始学习rCore-tutorial-book时的随笔杂记，记录了我的一些思考和学习过程。"
 ---
 
