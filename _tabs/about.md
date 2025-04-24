@@ -1,8 +1,14 @@
+## //删除此行以显示页面
 ---
 # the default layout is 'page'
+layout: page
 icon: fas fa-info-circle
 order: 4
 ---
+
+## 关于我
+
+[在这里添加您的个人介绍]
 
 ## 我的友链：
 
