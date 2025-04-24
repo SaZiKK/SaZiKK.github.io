@@ -16,7 +16,7 @@
 
 - name: "Reina"
   url: "https://www.cnblogs.com/si--nian"
-  avatar: "https://gravatar.com/avatar/default?s=100"
+  avatar: "../assets/figures/avatar1.jpg"
   description: 
 
 - name: "Artlesbol"
