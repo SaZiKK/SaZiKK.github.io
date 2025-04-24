@@ -6,49 +6,47 @@
   margin: 2rem 0;
 }
 
-/* 单个友链卡片 */
+/* 友链卡片 */
 .friend-card {
   position: relative;
   display: flex;
   align-items: center;
-  padding: 1rem;
+  padding: 1.2rem; /* 增加整体内边距 */
+  gap: 1rem; /* 使用 gap 属性设置元素间距 */
   background: var(--card-bg);
   border-radius: 0.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
+}
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+/* 头像样式 */
+.friend-avatar {
+  flex-shrink: 0;
+  /* 移除 margin-right，因为已经使用了 gap */
+  
+  img {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid var(--link-color);
+    transform: scale(1);
+    transition: transform 0.3s ease-out;
   }
 }
-
-.friend-avatar img {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-  object-fit: cover;
-  border: 2px solid var(--link-color);
-  transform: scale(1); /* 添加初始状态 */
-  transition: transform 0.3s ease-out; /* 只在 hover 时触发过渡 */
-}
-
-.friend-avatar img:hover {
-  transform: scale(1.2);
-}
-
 
 /* 友链信息 */
 .friend-info {
   flex-grow: 1;
   overflow: hidden;
+  padding: 0.2rem 0; /* 添加上下内边距 */
 }
 
 /* 友链标题 */
 .friend-name {
   font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.5rem; /* 增加标题和描述之间的间距 */
   
   a {
     color: var(--link-color);
@@ -59,6 +57,7 @@
     }
   }
 }
+
 
 /* 友链描述 */
 .friend-desc {
