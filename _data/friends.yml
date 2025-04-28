@@ -33,3 +33,19 @@
   url: "https://fridemn.best/"
   avatar: "https://fridemn.best/upload/%E5%9B%BE%E5%B1%82%201.png"
   description: 
+
+
+- name: "wdlin"
+  url: "https://wdlin233.github.io/"
+  avatar: "../assets/figures/wdlin.png"
+  description: 
+
+- name: "sixdayC"
+  url: "https://www.sixdayc.top/"
+  avatar: "https://www.sixdayc.top/profile.png"
+  description: 
+  
+- name: "Troy"
+  url: "https://blog.troy-y.org"
+  avatar: "https://avatars.githubusercontent.com/u/133468432?v=4"
+  description: 
