@@ -2,32 +2,32 @@
 - name: "Nelson Boss"
   url: "https://bosswnx.xyz/"
   avatar: "https://bosswnx.xyz/assets/img/avatar-800.webp"
-  description: 
+  description: 王老板
 
-- name: "Soulter"
-  url: "https://soulter.top/"
-  avatar: "https://dmx20070206.github.io/img/lwl.webp"
-  description:
+- name: "Reina"
+  url: "https://www.cnblogs.com/si--nian"
+  avatar: "../assets/figures/reina.jpg"
+  description: 纯牛马
 
 - name: "DMX"
   url: "https://dmx20070206.github.io/"
   avatar: "https://dmx20070206.github.io/img/dmx_avater.png"
-  description: 
-
-- name: "Reina"
-  url: "https://www.cnblogs.com/si--nian"
-  avatar: "../assets/figures/avatar1.jpg"
-  description: 
-
-- name: "Artlesbol"
-  url: "https://blog.artlesbol.top/"
-  avatar: "https://blog.artlesbol.top/profile.jpg"
-  description: 
+  description: 神人
 
 - name: "Solomaple"
   url: "https://solomaple.github.io/"
   avatar: "https://solomaple.github.io/img/myicon.jpg"
-  description: 
+  description: 顶级神人
+
+- name: "Artlesbol"
+  url: "https://blog.artlesbol.top/"
+  avatar: "https://blog.artlesbol.top/profile.jpg"
+  description: 和莉莉白学一辈子说话
+
+- name: "Soulter"
+  url: "https://soulter.top/"
+  avatar: "https://dmx20070206.github.io/img/lwl.webp"
+  description: 开发大牛，astrbot 之父
 
 - name: "Fridemn"
   url: "https://fridemn.best/"
@@ -44,7 +44,7 @@
   url: "https://www.sixdayc.top/"
   avatar: "https://www.sixdayc.top/profile.png"
   description: 
-  
+
 - name: "Troy"
   url: "https://blog.troy-y.org"
   avatar: "https://avatars.githubusercontent.com/u/133468432?v=4"

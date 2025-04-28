@@ -53,7 +53,7 @@
 .friend-name {
   font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.2rem;
   
   a {
     color: var(--link-color);
@@ -69,6 +69,8 @@
 .friend-desc {
   font-size: 0.9rem;
   color: var(--text-muted-color);
+  margin-top: 0rem; /* 向上移动一点 */
+  margin-bottom: 0.7rem;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
