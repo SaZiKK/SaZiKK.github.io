@@ -45,6 +45,11 @@
   avatar: "https://www.sixdayc.top/profile.png"
   description: 
 
+- name: "YOO_koishi"
+  url: "https://www.yookoishi.com/"
+  avatar: "https://www.yookoishi.com/IM/main.jpg"
+  description: 
+
 - name: "Troy"
   url: "https://blog.troy-y.org"
   avatar: "https://avatars.githubusercontent.com/u/133468432?v=4"
