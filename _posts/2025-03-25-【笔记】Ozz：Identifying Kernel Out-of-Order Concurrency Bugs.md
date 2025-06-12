@@ -1,5 +1,5 @@
 ---
-title: 【笔记】论文阅读笔记-OZZ:Identifying Kernel Out-of-Order Concurrency Bugs with In-Vivo Memory Access Reordering
+title: 【笔记】[SOSP'24] OZZ:Identifying Kernel Out-of-Order Concurrency Bugs with In-Vivo Memory Access Reordering
 Author: SaZiKK
 categories:
   - Papers

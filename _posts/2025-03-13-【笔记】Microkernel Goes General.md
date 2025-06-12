@@ -1,5 +1,5 @@
 ---
-title: 【笔记】论文阅读笔记-Microkernel Goes General
+title: 【笔记】[OSDI'24] Microkernel Goes General
 Author: SaZiKK
 categories:
   - Papers
