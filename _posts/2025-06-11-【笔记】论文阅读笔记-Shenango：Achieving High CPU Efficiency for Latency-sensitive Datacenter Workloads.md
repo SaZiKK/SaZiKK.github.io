@@ -32,7 +32,32 @@ Shenango 设计了一个调度算法以及一个内核态组件 IOKernel，以 *
 
 在启动时，runtime 根据可能会使用的最多 CPU 核心数创建内核线程，每个内核线程都有一个 local runqueue。应用程序则跑在轻量级的用户态线程中并被存放在上面的 runqueue 里，各个核心之间的工作通过 work stealing （是一种算法？）平衡。
 
+![main](../assets/figures/papers/shenango/main.jpg)
 
+### IOKernel
+
+IOKernel 负责了两个主要职能：
+  - 分配 CPU 核心给应用程序
+  - 负责所有网络包的输入输出转发
+
+关于核的分配算法比较有意思，IOKernel 会以 5μs 的粒度检查等待队列，如果发现等待队列里一个应用程序连续出现两次，说明这个程序出现了 5μs 以上的延迟，因此给他额外分配一个核。
+
+在分配的优先级上，IOKernel 考虑了**超线程、缓存局部性以及分配延迟**：
+- 超线程：倾向于将同一个应用程序的超线程分配到同一个核上
+- 缓存局部性：倾向于将线程分配到最近运行过同一段代码的核上
+- 分配延迟：优先分配空闲核
+
+## 效果
+
+可以看到在相同的负载情况下，shenango 保持了与 ZygOS 类似的平均延迟和尾延迟，同时也允许调度一部分核去进行批处理操作。
+![prof1](../assets/figures/papers/shenango/prof1.jpg)
+
+这里的的原文提到了，在超过五百万每秒访问量的时候瓶颈确实是 IOKernel
+> Shenango can handle over five million requests per second while maintaining a median response time of 37 μs and 99.9th percentile response time of 93 μs. Despite busy polling on all 16 hyperthreads, ZygOS maintains similar response times only up to four million requests per second. ZygOS does scale to support higher throughput than Shenango, though at a high latency penalty. Shenango achieves lower throughput because at the very low service times of memcached (< 2 μs), the IOKernel becomes a bottleneck. We discuss options for scaling out the IOKernel further in Section 8. For all other systems, memcached is bottlenecked by CPU.
+
+在负载快速大幅波动的情况下，shenango 也能很好的保持延迟在一个很低的水平：
+![prof2](../assets/figures/papers/shenango/prof2.png)
 ## 个人想法
 
-感觉核心思想就是在 by-pass 的同时以非常细的粒度调度 CPU 核，以适合更新的硬件场景，所以效率理应有很大提升，但是只分配一个 IOKernel 负责轮询网卡、分发包和调度核真的够吗，图里也可以看出在访问量超过五百万每秒的时候 shenango 的尾延迟平均延迟都暴增，这是不是和 IOKernel 瓶颈有关呢？
+感觉核心思想就是在 by-pass 的同时以非常细的粒度调度 CPU 核，以适合更新的硬件场景，所以效率理应有很大提升。虽然 IOKernel 在高负载场景（500w RPS 以上）下会成为瓶颈，但是作者在 discussion 里提到了解决方案，如每一个 NUMA 节点都分配一个 IOKernel。
+
