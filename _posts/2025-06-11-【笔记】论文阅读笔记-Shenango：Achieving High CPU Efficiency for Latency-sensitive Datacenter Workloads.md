@@ -28,7 +28,7 @@ Shenango 设计了一个调度算法以及一个内核态组件 IOKernel，以 *
 
 首先，shenango 设计了一种**高效的拥塞检测算法**，同时将线程和数据包的等待时间都纳入拥塞检测中，并对应用程序的包和线程队列进行细粒度的高频监控。其次，shenango 设计了高特权级组件 **IOKernel**。IOKernel 在一个专门的 CPU 核上运行，用于统一轮询网卡、检查应用的线程队列和网络包队列，分发包以及重新分配 CPU 核心。由于在单独核心上运行， IOKernel 的延迟极低，5.9μs 中 IOKernel 的计算只占 2μs.
 
-关于如何处理 TLB 损耗，IOKernel 利用了 PCID 机制，由于快速切换的基本是同几个进程，TLB 几乎不需要刷新，将切换进程的开销降低到了纳秒级（原生 Linux 也能做到）
+关于如何处理 TLB 损耗，IOKernel 利用了 PCID 机制（RV 中应该叫 ASID），由于快速切换的基本是同几个进程，TLB 几乎不需要刷新，将切换进程的开销降低到了纳秒级（原生 Linux 也能做到）
 
 另一方面，应用程序的在各自的 runtime 中运行，和 IOKernel 通过共享内存通信。这些 runtime 都是不可信的，并负责提供线程、锁、socket 等抽象。shenango runtime 以 library 的形式与应用程序链接并被调用，以允许 kernel-like 函数在应用程序的地址空间中被调用。
 
