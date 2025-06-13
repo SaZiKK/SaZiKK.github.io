@@ -85,7 +85,22 @@ style="background-image: url('/assets/figures/background.jpg');background-size: 
             javascript:location.href = 'mailto:' + ['{{ email[0] }}','{{ email[1] }}'].join('@')
           {%- endcapture -%}
         {% when 'rss' %}
-          {% assign url = '/feed.xml' | relative_url %}
+          {% assign url = '#' %}
+          {% assign qr_code_path = '../assets/figures/wechat-qr.png' %}
+          <div class="wechat-popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.3); z-index: 1000;">
+            <img src="{{ qr_code_path }}" alt="WeChat QR Code" style="max-width: 200px;">
+            <div style="text-align: center; margin-top: 10px;">请记得加备注哦</div>
+            <button onclick="this.parentElement.style.display='none'" style="position: absolute; top: 5px; right: 5px; background: none; border: none; cursor: pointer;">×</button>
+          </div>
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              document.querySelector('a[aria-label="rss"]').onclick = function(e) {
+                e.preventDefault();
+                document.querySelector('.wechat-popup').style.display = 'block';
+                return false;
+              };
+            });
+          </script>
         {% else %}
           {% assign url = entry.url %}
       {% endcase %}
