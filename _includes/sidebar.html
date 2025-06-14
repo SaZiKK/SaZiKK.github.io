@@ -86,7 +86,7 @@ style="background-image: url('/assets/figures/background.jpg');background-size: 
           {%- endcapture -%}
         {% when 'rss' %}
           {% assign url = '#' %}
-          {% assign qr_code_path = '../assets/figures/wechat-qr.png' %}
+          {% assign qr_code_path = 'https://sazikk.top/assets/figures/wechat-qr.png' %}
           <div class="wechat-popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.3); z-index: 1000;">
             <img src="{{ qr_code_path }}" alt="WeChat QR Code" style="max-width: 200px;">
             <div style="text-align: center; margin-top: 10px;">请记得加备注哦</div>
