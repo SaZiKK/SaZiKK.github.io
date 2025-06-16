@@ -9,7 +9,6 @@ tags:
   - Linux Kernel
 date modify: 2024-09-25 22:59:01 +0800
 comments: true
-pin: true
 excerpt: "这是我参与PLCT实验室rvlk小队的学习笔记，详细的记录了我逐步学习linux kernel的过程"
 ---
 
