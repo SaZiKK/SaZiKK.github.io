@@ -84,3 +84,7 @@ Caladan 可以同时保持高 CPU 效率以及严格的任务隔离：
 安全方面，目前 Caladan 的调度策略无法防止跨超线程的瞬态执行攻击，也就是说同一核心上的超线程应当是互相信任的。
 
 > 瞬态执行攻击即 meltdown、spectre 之类的 side channel 攻击
+
+## 个人想法
+
+Caladan 的 implement 写的非常详细，暂时没有仔细阅读，只看了大概思想
