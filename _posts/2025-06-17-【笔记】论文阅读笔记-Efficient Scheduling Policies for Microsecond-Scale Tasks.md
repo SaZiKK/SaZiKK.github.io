@@ -1,12 +1,12 @@
 ---
-title: 【笔记】[ATC'15] Efficient Scheduling Policies for Microsecond-Scale Tasks
+title: 【笔记】[NSDI'22] Efficient Scheduling Policies for Microsecond-Scale Tasks
 Author: SaZiKK
 categories:
   - Papers
 tags:
   - os
 comments: true
-excerpt: "2015 ATC 论文阅读笔记-Efficient Scheduling Policies for Microsecond-Scale Tasks"
+excerpt: "2022 NSDI 论文阅读笔记-Efficient Scheduling Policies for Microsecond-Scale Tasks"
 
 ---
 
