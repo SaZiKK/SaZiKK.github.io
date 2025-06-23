@@ -1,5 +1,5 @@
 ---
-title: 【笔记】[SOSP'17] ffwd: delegation is (much) faster than you think
+title: 【笔记】[SOSP'17] ffwd：delegation is (much) faster than you think
 categories:
   - Papers
 tags:
@@ -47,7 +47,7 @@ ffwd 设计了一个 API，允许将一个普通 C 函数委托给服务进程�
 
 ffwd 在临界区较短且竞争激烈（线程很多）的情况下表现优异，但是当线程数更少、程序的固有并行性更强、临界区较长或者临界区间隔较大时，ffwd 的优势开始减弱，因为服务进程成为了瓶颈。
 
-> 作者提到了临界区较长的情况细粒度锁的表现可能比委托更优，不过这里我不能理解的是，程序固有并行性对于 ffwd 的影响在哪？
+> 作者提到了临界区较长的情况细粒度锁的表现可能比委托更优，不过这里我不能理解的是，程序固有并行性对于 ffwd 的影响在哪？给服务端发请求太密集吗？
 
 ![prof](../assets/figures/papers/ffwd/prof.png)
 

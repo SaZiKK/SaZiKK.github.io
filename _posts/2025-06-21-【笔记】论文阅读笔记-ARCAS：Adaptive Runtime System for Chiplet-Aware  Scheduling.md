@@ -1,5 +1,5 @@
 ---
-title: 【笔记】ARCAS: Adaptive Runtime System for Chiplet-Aware SchedulingTasks
+title: 【笔记】ARCAS：Adaptive Runtime System for Chiplet-Aware SchedulingTasks
 Author: SaZiKK
 categories:
   - Papers
