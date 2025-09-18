@@ -1,5 +1,5 @@
 ---
-title: 【笔记】[SIGCOMM'25] Low-Overhead Distributed Application Observation with DeepTrace: Achieving Accurate Tracing in Production Systems
+title: 【笔记】[SIGCOMM'25] Low-Overhead Distributed Application Observation with DeepTrace： Achieving Accurate Tracing in Production Systems
 categories:
   - Papers
 tags:
