@@ -10,7 +10,6 @@ tags:
   - DB
 comments: true
 date create: 2024-09-25 22:52:19 +0800
-pin: true
 ---
 
 这是2024系统能力大赛OceanBase数据库赛道的开发日志，记录我的开发思路和遇到的问题。
