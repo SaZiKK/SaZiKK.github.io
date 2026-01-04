@@ -3,7 +3,7 @@ title: 【笔记】[SOSP'25] Spirit：Fair Allocation of Interdependent Resource
 categories:
   - Papers
 tags:
-  - os
+  - network
 comments: true
 excerpt: "SOSP 2025 论文阅读笔记-Spirit: Fair Allocation of Interdependent Resources  in Remote Memory Systems"
 
