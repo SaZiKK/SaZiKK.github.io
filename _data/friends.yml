@@ -11,7 +11,7 @@
 
 - name: "DMX"
   url: "https://dmx20070206.github.io/"
-  avatar: "https://dmx20070206.github.io/img/dmx_avater.png"
+  avatar: "https://dmx20070206.github.io/images/DMX_cat.jpg"
   description: 神人
 
 - name: "Solomaple"
@@ -26,7 +26,7 @@
 
 - name: "Soulter"
   url: "https://soulter.top/"
-  avatar: "https://dmx20070206.github.io/img/lwl.webp"
+  avatar: "https://blog.soulter.top/assets/avatar.webp"
   description: 开发大牛，astrbot 之父
 
 - name: "Fridemn"
@@ -47,7 +47,7 @@
 
 - name: "YOO_koishi"
   url: "https://www.yookoishi.com/"
-  avatar: "https://www.yookoishi.com/IM/main.jpg"
+  avatar: "https://www.yookoishi.com/profile.png"
   description: 
 
 - name: "Troy"
