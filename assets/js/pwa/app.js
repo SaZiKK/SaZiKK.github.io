@@ -8,9 +8,6 @@ if ('serviceWorker' in navigator) {
 
   if (isEnabled) {
     const swUrl = '{{ '/sw.min.js' | relative_url }}';
-    const $notification = $('#notification');
-    const $btnRefresh = $('#notification .toast-body>button');
-
     navigator.serviceWorker.register(swUrl).then((registration) => {
       // 如果有等待的Service Worker，直接更新
       if (registration.waiting) {
